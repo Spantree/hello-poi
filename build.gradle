@@ -15,6 +15,7 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.14'
     compile 'org.apache.poi:poi:3.17'
     compile 'org.apache.poi:poi-ooxml:3.17'
+    compileOnly 'org.projectlombok:lombok:1.16.20'
     testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
     testCompile 'junit:junit:4.12'
 }
