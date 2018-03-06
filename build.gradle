@@ -1,0 +1,19 @@
+group 'net.spantree'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    compile 'org.apache.poi:poi:3.17'
+    compile 'org.apache.poi:poi-ooxml:3.17'
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+    testCompile 'junit:junit:4.12'
+}
