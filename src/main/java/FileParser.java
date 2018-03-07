@@ -11,10 +11,10 @@ import java.util.Map;
 @Builder
 public class FileParser {
 
-    public Map<String, Object> parseRow(Row row) throws IOException, InvalidFormatException {
+    public Map<String, Object> parseRow(String sheetName, Row row) throws IOException, InvalidFormatException {
         LinkedHashMap<String, Object> output = new LinkedHashMap<>();
             for (Cell cell : row) {
-                CellReference cellReference = new CellReference(row.getRowNum(), cell.getColumnIndex());
+                CellReference cellReference = new CellReference(sheetName, row.getRowNum(), cell.getColumnIndex(), true, true);
                 CellType cellType = cell.getCellTypeEnum();
                 if (cell.getCellTypeEnum().equals(CellType.FORMULA)) {
                     cellType = cell.getCachedFormulaResultTypeEnum();
@@ -40,7 +40,7 @@ public class FileParser {
         int rowNum = Integer.parseInt(splitOffset[1]);
         Sheet sheet = workbook.getSheetAt(sheetNum);
         Row row = sheet.getRow(rowNum);
-        return parseRow(row);
+        return parseRow(sheet.getSheetName(), row);
     }
 
     public Map<String, Object> parse(InputStream fileInputStream) throws IOException, InvalidFormatException {
@@ -48,7 +48,7 @@ public class FileParser {
         LinkedHashMap<String, Object> output = new LinkedHashMap<>();
         for (Sheet sheet : workbook) {
             for (Row row : sheet) {
-                output.putAll(parseRow(row));
+                output.putAll(parseRow(sheet.getSheetName(), row));
             }
         }
         return output;
