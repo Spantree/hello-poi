@@ -33,6 +33,7 @@ public class FileParser {
 
     public Map<String, Object> parseAtOffset(String offset, InputStream fileInputStream) throws IOException, InvalidFormatException {
         Workbook workbook = WorkbookFactory.create(fileInputStream);
+
 //      Offset format will have the sheet number as the first item and the row number as the second item.  A colon will separate the two.  For example, 3:2 is sheet 3 and row 2.
         String[] splitOffset = offset.split(":");
         int sheetNum = Integer.parseInt(splitOffset[0]);

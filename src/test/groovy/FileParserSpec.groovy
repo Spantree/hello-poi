@@ -1,12 +1,13 @@
 import org.apache.poi.ss.util.CellReference
 import spock.lang.Specification
 
-
 class FileParserSpec extends Specification {
     def fileInputStreamXlsx
     def fileInputStreamXls
-    def fileInputStreamFormulas
-    def fileInputStreamOffset
+    def fileInputStreamFormulasXlsx
+    def fileInputStreamOffsetXlsx
+    def fileInputStreamFormulasXls
+    def fileInputStreamOffsetXls
     def fileParser
     def expected
     def expectedFormulas
@@ -15,8 +16,10 @@ class FileParserSpec extends Specification {
     void setup() {
         fileInputStreamXlsx = ClassLoader.class.getResourceAsStream("/TestFile.xlsx")
         fileInputStreamXls = ClassLoader.class.getResourceAsStream("/TestFileOlderVersion.xls")
-        fileInputStreamFormulas = ClassLoader.class.getResourceAsStream("/TestFileFormulas.xlsx")
-        fileInputStreamOffset = ClassLoader.class.getResourceAsStream("/TestFileOffset.xlsx")
+        fileInputStreamFormulasXlsx = ClassLoader.class.getResourceAsStream("/TestFileFormulas.xlsx")
+        fileInputStreamOffsetXlsx = ClassLoader.class.getResourceAsStream("/TestFileOffset.xlsx")
+        fileInputStreamFormulasXls = ClassLoader.class.getResourceAsStream("/TestFileFormulas.xls")
+        fileInputStreamOffsetXls = ClassLoader.class.getResourceAsStream("/TestFileOffset.xls")
         fileParser = FileParser.builder().build()
         expected = [
                 (CellReference.newInstance(0, 0).formatAsString()): "column1",
@@ -89,16 +92,31 @@ class FileParserSpec extends Specification {
             parsedOutput == expected
     }
 
-    def "Can successfully parse the output of a formula"() {
+    def "Can successfully parse the output of a formula in a xlsx file"() {
         when: "processing a file with formulas"
-            def parsedOutput = fileParser.parse(fileInputStreamFormulas)
+            def parsedOutput = fileParser.parse(fileInputStreamFormulasXlsx)
         then: "returns a hashmap with the processed input"
             parsedOutput == expectedFormulas
     }
 
-    def "Can successfully handle an offset"() {
+    def "Can successfully handle an offset in a xlsx file"() {
         when: "processing cells in a specific row and sheet"
-            def parsedOutput = fileParser.parseAtOffset("1:0", fileInputStreamOffset)
+            def parsedOutput = fileParser.parseAtOffset("1:0", fileInputStreamOffsetXlsx)
+        then: "returns a hashmap with the processed input"
+            parsedOutput == expectedOffset
+    }
+
+    def "Can successfully parse the output of a formula in a xls file"() {
+        when: "processing a file with formulas"
+            def parsedOutput = fileParser.parse(fileInputStreamFormulasXls)
+        then: "returns a hashmap with the processed input"
+            parsedOutput == expectedFormulas
+    }
+
+
+    def "Can successfully handle an offset in a xls file"() {
+        when: "processing cells in a specific row and sheet"
+            def parsedOutput = fileParser.parseAtOffset("1:0", fileInputStreamOffsetXls)
         then: "returns a hashmap with the processed input"
             parsedOutput == expectedOffset
     }
