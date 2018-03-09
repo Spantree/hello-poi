@@ -11,7 +11,7 @@ import java.util.Map;
 @Builder
 public class FileParser {
 
-    public Map<String, Object> parseRow(String sheetName, Row row) throws IOException, InvalidFormatException {
+    public Map<String, Object> parseRow(String sheetName, Row row) {
         LinkedHashMap<String, Object> output = new LinkedHashMap<>();
             for (Cell cell : row) {
                 CellReference cellReference = new CellReference(sheetName, row.getRowNum(), cell.getColumnIndex(), true, true);
